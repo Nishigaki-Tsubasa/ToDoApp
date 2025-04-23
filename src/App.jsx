@@ -1,6 +1,9 @@
 import { useState } from "react";
 import TaskForm from "./components/TaskForm";
 
+import { auth } from "./firebase.js";
+console.log(auth);
+
 function App() {
   const [tasks, setTasks] = useState([]);
 
@@ -11,9 +14,6 @@ function App() {
     };
     setTasks([newTask, ...tasks]);
   };
-
-
-  const [message, setMessage] = useState("");
 
 
   return (
