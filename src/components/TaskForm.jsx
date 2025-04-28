@@ -1,39 +1,42 @@
 import { useState } from "react";
 
-const TaskForm = ({ onAdd }) => {
-    const [input, setInput] = useState("");
-
-
+const TaskForm = ({ onTaskAdded }) => {
+    const [title, setInput] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!input.trim()) return;
+        if (!title.trim()) return;
 
-        console.log(input);
+        const timestamp = new Date().toISOString();
+        const isCompleted = false;
 
-        // POSTでバックエンドに送信
-        const res = await fetch("http://localhost:5000/api/tasks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ input }),
-        });
+        try {
+            await fetch("http://localhost:5000/api/tasks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title, timestamp, isCompleted }),
+            });
 
-        const newTask = await res.json();
-        // onTaskAdded(newTask); // 親コンポーネントに通知
+            setInput(''); // 入力欄リセット
 
-        onAdd(input);     // Appコンポーネントに追加を伝える
-        setInput("");     // 入力欄をリセット
+            if (onTaskAdded) {
+                onTaskAdded(); // 親に通知！
+            }
+        } catch (error) {
+            console.error("Error adding task:", error);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="task-form">
+            <h1>ToDoリスト</h1>
             <input
                 type="text"
                 placeholder="タスクを入力"
-                value={input}
+                value={title}
                 onChange={(e) => setInput(e.target.value)}
                 className="task-input"
             />
