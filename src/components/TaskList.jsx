@@ -1,4 +1,4 @@
-function TaskList({ tasks, onDelete }) {
+function TaskList({ tasks, onDelete, onclick }) {
     if (!tasks.length) {
         return <div>タスクがまだありません！</div>;
     }
@@ -9,7 +9,13 @@ function TaskList({ tasks, onDelete }) {
             <ul>
                 {tasks.map((task) => (
                     <li key={task.id}>
-                        <strong>タスク：</strong> {task.title}
+
+                        {/* <button coclick={() => onclick(task.id)}>完了</button>
+                        <strong>タスク：</strong> {task.title} */}
+
+                        <span onClick={() => onclick(task.id)}>
+                            {task.title} {task.isCompleted ? "(完了)" : "(未完了)"}
+                        </span>
 
                         <button onClick={() => onDelete(task.id)}>削除</button>
 

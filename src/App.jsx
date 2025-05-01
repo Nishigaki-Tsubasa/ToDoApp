@@ -32,10 +32,23 @@ function App() {
     }
   };
 
+  const handleOnTask = async (taskId) => {
+    try {
+      await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+        method: "put",
+      });
+      fetchTasks(); // 削除後にリストを更新
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+
+  }
+
+
   return (
     <div>
       <TaskForm onTaskAdded={handleTaskAdded} />
-      <TaskList tasks={tasks} onDelete={handleDeleteTask} />
+      <TaskList tasks={tasks} onDelete={handleDeleteTask} onclick={handleOnTask} />
     </div>
   );
 }
