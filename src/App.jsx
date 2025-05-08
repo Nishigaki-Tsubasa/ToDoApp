@@ -1,14 +1,19 @@
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import { useState, useEffect } from 'react';
+import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { db } from './firebase';
 
 function App() {
   const [tasks, setTasks] = useState([]);
 
-  // タスク一覧を取得する関数
+  // Firestoreからタスクを取得
   const fetchTasks = async () => {
-    const response = await fetch("http://localhost:5000/api/tasks");
-    const data = await response.json();
+    const querySnapshot = await getDocs(collection(db, "tasks"), orderBy("createdAt", "asc"));
+    const data = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
     setTasks(data);
   };
 
@@ -16,43 +21,37 @@ function App() {
     fetchTasks();
   }, []);
 
-
   const handleTaskAdded = () => {
     fetchTasks();
   };
 
   const handleDeleteTask = async (taskId) => {
     try {
-      await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      fetchTasks(); // 削除後にリストを更新
+      await deleteDoc(doc(db, "tasks", taskId));
+      fetchTasks();
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.error("削除エラー:", error);
     }
   };
 
   const handleOnTask = async (taskId) => {
     try {
-      await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
-        method: "put",
+      const taskDoc = doc(db, "tasks", taskId);
+      await updateDoc(taskDoc, {
+        completed: true, // 任意の状態更新
       });
-      fetchTasks(); // 削除後にリストを更新
+      fetchTasks();
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.error("更新エラー:", error);
     }
-
-  }
-
+  };
 
   return (
     <div>
       <TaskForm onTaskAdded={handleTaskAdded} />
-      <TaskList tasks={tasks} onDelete={handleDeleteTask} onclick={handleOnTask} />
+      <TaskList tasks={tasks} onDelete={handleDeleteTask} onToggle={handleOnTask} />
     </div>
   );
 }
-
-
 
 export default App;
