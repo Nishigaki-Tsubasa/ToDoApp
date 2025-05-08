@@ -1,50 +1,36 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { serverTimestamp } from 'firebase/firestore';
 
-const TaskForm = ({ onTaskAdded }) => {
-    const [title, setInput] = useState('');
+
+function TaskForm({ onTaskAdded }) {
+    const [title, setTitle] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!title.trim()) return;
-
-        const timestamp = new Date().toISOString();
-        const isCompleted = false;
+        if (!title) return;
 
         try {
-            await fetch("http://localhost:5000/api/tasks", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title, timestamp, isCompleted }),
+            await addDoc(collection(db, "tasks"), {
+                title,
+                completed: false,
+                createdAt: serverTimestamp()
             });
-
-            setInput(''); // 入力欄リセット
-
-            if (onTaskAdded) {
-                onTaskAdded(); // 親に通知！
-            }
+            setTitle('');
+            onTaskAdded(); // 親コンポーネントに通知
         } catch (error) {
-            console.error("Error adding task:", error);
+            console.error("追加失敗:", error);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="task-form">
-            <h1>ToDoリスト</h1>
-            <input
-                type="text"
-                placeholder="タスクを入力"
-                value={title}
-                onChange={(e) => setInput(e.target.value)}
-                className="task-input"
-            />
-            <button type="submit" className="add-button">
-                追加
-            </button>
+        <form onSubmit={handleSubmit}>
+            <h2>タスク追加</h2>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="タスク名" />
+            <button type="submit">追加</button>
         </form>
     );
-};
+}
 
 export default TaskForm;
