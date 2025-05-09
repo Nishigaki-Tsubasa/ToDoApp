@@ -6,12 +6,13 @@ import { db } from './firebase';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 
+
 function App() {
   const [tasks, setTasks] = useState([]);
 
   // Firestoreからタスクを取得
   const fetchTasks = async () => {
-    const querySnapshot = await getDocs(collection(db, "tasks"), orderBy("createdAt", "asc"));
+    const querySnapshot = await getDocs(query(collection(db, "tasks"), orderBy("createdAt", "asc")));
     const data = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
@@ -40,7 +41,6 @@ function App() {
     try {
       const taskDocRef = doc(db, "tasks", taskId);
       const taskSnap = await getDoc(taskDocRef);
-      console.log(taskSnap);
 
       if (taskSnap.exists()) {
         const currentCompleted = taskSnap.data().completed;
@@ -59,6 +59,12 @@ function App() {
     }
   };
 
+  const handleEdit = async (id, newTitle) => {
+    const docRef = doc(db, "tasks", id);
+    await updateDoc(docRef, { title: newTitle });
+    fetchTasks(); // 再取得 or 状態更新
+  };
+
 
   return (
     <>
@@ -70,10 +76,11 @@ function App() {
         </Container>
       </Navbar>
 
+
       <div className="d-flex justify-content-center mt-4">
         <div className="w-100" style={{ maxWidth: '600px', fontSize: '0.9rem' }}>
           <TaskForm onTaskAdded={handleTaskAdded} />
-          <TaskList tasks={tasks} onDelete={handleDeleteTask} onToggle={handleOnTask} />
+          <TaskList tasks={tasks} onDelete={handleDeleteTask} onToggle={handleOnTask} onEdit={handleEdit} />
         </div>
       </div>
     </>
