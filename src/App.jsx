@@ -1,8 +1,10 @@
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -36,21 +38,46 @@ function App() {
 
   const handleOnTask = async (taskId) => {
     try {
-      const taskDoc = doc(db, "tasks", taskId);
-      await updateDoc(taskDoc, {
-        completed: true, // 任意の状態更新
-      });
-      fetchTasks();
+      const taskDocRef = doc(db, "tasks", taskId);
+      const taskSnap = await getDoc(taskDocRef);
+      console.log(taskSnap);
+
+      if (taskSnap.exists()) {
+        const currentCompleted = taskSnap.data().completed;
+
+
+        await updateDoc(taskDocRef, {
+          completed: !currentCompleted,
+        });
+        fetchTasks();
+
+      } else {
+        console.error("指定されたタスクが存在しません");
+      }
     } catch (error) {
       console.error("更新エラー:", error);
     }
   };
 
+
   return (
-    <div>
-      <TaskForm onTaskAdded={handleTaskAdded} />
-      <TaskList tasks={tasks} onDelete={handleDeleteTask} onToggle={handleOnTask} />
-    </div>
+    <>
+      <Navbar className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand href="#home">
+            <h2 className="mb-0">ToDoリスト</h2>
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
+
+      <div className="d-flex justify-content-center mt-4">
+        <div className="w-100" style={{ maxWidth: '600px', fontSize: '0.9rem' }}>
+          <TaskForm onTaskAdded={handleTaskAdded} />
+          <TaskList tasks={tasks} onDelete={handleDeleteTask} onToggle={handleOnTask} />
+        </div>
+      </div>
+    </>
+
   );
 }
 

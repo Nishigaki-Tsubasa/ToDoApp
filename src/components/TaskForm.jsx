@@ -3,7 +3,6 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { serverTimestamp } from 'firebase/firestore';
 
-
 function TaskForm({ onTaskAdded }) {
     const [title, setTitle] = useState('');
 
@@ -15,7 +14,7 @@ function TaskForm({ onTaskAdded }) {
             await addDoc(collection(db, "tasks"), {
                 title,
                 completed: false,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
             });
             setTitle('');
             onTaskAdded(); // 親コンポーネントに通知
@@ -25,11 +24,26 @@ function TaskForm({ onTaskAdded }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>タスク追加</h2>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="タスク名" />
-            <button type="submit">追加</button>
-        </form>
+        <div className="container mt-4" style={{ fontSize: '0.9rem' }}>
+            <h2 className="text-center mb-3">タスク追加</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="row g-2">
+                    <div className="col-9">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="タスク名を入力"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
+                    <div className="col-3 d-grid">
+                        <button type="submit" className="btn btn-primary">追加</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     );
 }
 
