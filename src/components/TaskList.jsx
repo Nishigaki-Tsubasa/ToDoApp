@@ -16,16 +16,32 @@ function TaskList({ tasks, onDelete, onToggle, onEdit }) {
     };
 
     return (
-        <div className="mt-4">
-            <h2 className="fs-5 mb-3">タスクリスト</h2>
+        <div className="mt-5">
+            <h4 className="fs-5 mb-3">タスクの一覧</h4>
             <ul className="list-group">
                 {tasks.map((task) => (
                     <li
                         key={task.id}
                         className={`list-group-item d-flex justify-content-between align-items-center ${task.completed ? 'list-group-item-success' : ''
                             }`}
+
                     >
-                        <span className="fs-6 flex-grow-1 me-2">
+                        {/* 丸いチェックボックス */}
+                        <button
+                            onClick={() => onToggle(task.id)}
+                            className={`rounded-circle border me-2 d-flex align-items-center justify-content-center`}
+                            style={{
+                                width: '28px',
+                                height: '28px',
+                                backgroundColor: task.completed ? '#28a745' : '#fff',
+                                border: '2px solid #ccc',
+                                color: '#fff',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            {task.completed && '✓'}
+                        </button>
+                        <span className="fs-6 flex-grow-1 me-2" >
                             {editingId === task.id ? (
                                 <input
                                     type="text"
@@ -37,14 +53,10 @@ function TaskList({ tasks, onDelete, onToggle, onEdit }) {
                                 task.title
                             )}
                         </span>
-                        <span>
-                            {task.completed && <span className="badge bg-success">完了</span>}
-                            <button
-                                onClick={() => onToggle(task.id)}
-                                className="btn btn-sm btn-outline-primary ms-2"
-                            >
-                                完了
-                            </button>
+                        <span className="fs-6 flex-grow-1 me-2">{/* タイトル or 編集欄 */}</span>
+
+                        <span className="d-flex align-items-center">
+
                             {editingId === task.id ? (
                                 <button
                                     onClick={() => handleSaveClick(task.id)}

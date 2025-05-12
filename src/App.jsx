@@ -14,7 +14,6 @@ function App() {
     // ログイン状態を監視
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log('ログイン状態:', currentUser);
     });
     return () => unsubscribe();
   }, []);
@@ -28,7 +27,7 @@ function App() {
   return (
     <div>
       {isLoginPage ? <Login /> : <Register />}
-      <div className="text-center mt-3">
+      <div className="text-center mt-1">
         {isLoginPage ? (
           <button className="btn btn-link" onClick={() => setIsLoginPage(false)}>新規登録へ</button>
         ) : (

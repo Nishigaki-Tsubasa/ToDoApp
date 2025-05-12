@@ -17,7 +17,7 @@ function Login() {
             await signInWithEmailAndPassword(auth, email, password);
             setSuccess('ログイン成功しました！');
         } catch (err) {
-            setError('ログイン失敗：' + err.message);
+            setError("ログインに失敗しました。メールアドレスまたはパスワードを確認してください。");
         }
     };
 
@@ -41,6 +41,12 @@ function Login() {
                     </div>
 
                     <button type="submit" className="btn btn-success w-100">ログイン</button>
+
+                    <span>
+                        アカウントをお持ちでない方は、
+                        <a className="btn btn-link" onClick={() => setIsLoginPage(false)}>新規登録へ</a>
+
+                    </span>
                 </form>
             </div>
         </div>

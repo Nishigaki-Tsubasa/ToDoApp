@@ -1,7 +1,7 @@
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy, getDoc, where } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy, getDoc, where, onSnapshot } from 'firebase/firestore';
 import { db } from './firebase';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -43,8 +43,7 @@ function Todo({ user }) {
         }
     };
 
-    // Firestoreからタスクを取得
-    const fetchTasks = async () => {
+    const fetchTasks = () => {
         try {
             // 'userId'でフィルタリングし、'createdAt'で昇順に並べる
             const q = query(
@@ -53,12 +52,17 @@ function Todo({ user }) {
                 orderBy("createdAt", "asc")     // 作成日で昇順に並べる
             );
 
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setTasks(data);  // タスクデータを状態にセット
+            // onSnapshotを使用してリアルタイムでデータを取得
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const data = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setTasks(data);  // タスクデータを状態にセット
+            });
+
+            // コンポーネントがアンマウントされる際にリスナーをクリーンアップ
+            return unsubscribe;
         } catch (error) {
             console.error("Error fetching tasks:", error);
         }
@@ -89,12 +93,19 @@ function Todo({ user }) {
             if (taskSnap.exists()) {
                 const currentCompleted = taskSnap.data().completed;
 
+                // まずローカルで完了状態を変更
+                const updatedTasks = tasks.map((task) =>
+                    task.id === taskId ? { ...task, completed: !currentCompleted } : task
+                );
+                setTasks(updatedTasks); // ステートを更新して即座にUIを変更
 
+                // Firestoreを更新
                 await updateDoc(taskDocRef, {
                     completed: !currentCompleted,
                 });
-                fetchTasks();
 
+                // 更新後に再度タスクを取得
+                fetchTasks();
             } else {
                 console.error("指定されたタスクが存在しません");
             }
@@ -102,6 +113,7 @@ function Todo({ user }) {
             console.error("更新エラー:", error);
         }
     };
+
 
     const handleEdit = async (id, newTitle) => {
         const docRef = doc(db, "tasks", id);
@@ -112,21 +124,21 @@ function Todo({ user }) {
 
     return (
         <>
-            <Navbar className="bg-body-tertiary">
-                <Container>
+            <Navbar className="bg-light shadow-sm py-3">
+                <Container className="d-flex justify-content-between align-items-center">
                     <Navbar.Brand href="#home">
-                        <h2 className="mb-0">ToDoリスト</h2>
+                        <h2 className="mb-0 text-primary">ToDoリスト</h2>
                     </Navbar.Brand>
+
+                    <div className="d-flex align-items-center gap-3">
+                        <p className="mb-0 fw-semibold text-secondary">ようこそ, {name} さん</p>
+                        <button className="btn btn-outline-danger" onClick={handleLogout}>
+                            ログアウト
+                        </button>
+                    </div>
                 </Container>
-                <span className="d-flex align-items-center">
-                    <p>ようこそ, {name} さん</p>
-
-                    {/* <button class="btn btn-danger" onClick={handleLogout}>ログアウト</button> */}
-                    <button className="logout" onClick={handleLogout}>ログアウト</button>
-
-                </span>
-
             </Navbar>
+
 
 
 
