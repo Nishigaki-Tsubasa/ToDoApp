@@ -1,0 +1,12 @@
+.logout {
+    border-radius: 10px;
+    background-color: #418edf;
+    width: 120px;
+    color: white;
+}
+
+.logout::before {
+    content: url('../public/logout_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png');
+    margin-right: 10px;
+    vertical-align: middle;
+}
