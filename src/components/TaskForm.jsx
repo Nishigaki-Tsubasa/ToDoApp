@@ -37,26 +37,31 @@ function TaskForm({ onTaskAdded }) {
     };
 
     return (
-        <div className="container mt-4" style={{ fontSize: '0.9rem' }}>
-            <h2 className="text-center mb-3">タスク追加</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
-            <form onSubmit={handleSubmit}>
-                <div className="row g-2">
-                    <div className="col-9">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="タスク名を入力"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
+        <div className="container mt-5" style={{ fontSize: '0.9rem' }}>
+            <div className="bg-white p-4 rounded shadow-sm border">
+                <h4 className="text-center mb-3">新しいタスクを追加</h4>
+
+                {error && <div className="alert alert-danger">{error}</div>}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="row g-2">
+                        <div className="col-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="タスク名を入力"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
+                        <div className="col-3 d-grid">
+                            <button type="submit" className="btn btn-primary">追加</button>
+                        </div>
                     </div>
-                    <div className="col-3 d-grid">
-                        <button type="submit" className="btn btn-primary">追加</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
+
     );
 }
 
