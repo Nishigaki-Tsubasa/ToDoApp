@@ -1,31 +1,45 @@
 import { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { db, auth } from '../firebase';
+
+
 
 function TaskForm({ onTaskAdded }) {
     const [title, setTitle] = useState('');
+    const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!title) return;
 
         try {
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                setError('ログインしてください');
+                return;
+            }
+
             await addDoc(collection(db, "tasks"), {
                 title,
                 completed: false,
                 createdAt: serverTimestamp(),
+                userId: auth.currentUser.uid, // 現在のユーザーIDを取得
             });
+
             setTitle('');
             onTaskAdded(); // 親コンポーネントに通知
         } catch (error) {
             console.error("追加失敗:", error);
+            setError('タスクの追加に失敗しました。もう一度お試しください。');
         }
     };
 
     return (
         <div className="container mt-4" style={{ fontSize: '0.9rem' }}>
             <h2 className="text-center mb-3">タスク追加</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="row g-2">
                     <div className="col-9">
@@ -43,7 +57,6 @@ function TaskForm({ onTaskAdded }) {
                 </div>
             </form>
         </div>
-
     );
 }
 
