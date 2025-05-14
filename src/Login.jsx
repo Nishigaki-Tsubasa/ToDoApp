@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebase';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -20,6 +22,21 @@ function Login() {
             setError("ログインに失敗しました。メールアドレスまたはパスワードを確認してください。");
         }
     };
+
+
+    const handleGoogleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log("ログイン成功:", user);
+            // 必要なら user 情報を保存したり、ページ遷移したり
+        } catch (error) {
+            console.error("Google ログイン失敗:", error);
+        }
+    };
+
+
 
     return (
         <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -42,11 +59,10 @@ function Login() {
 
                     <button type="submit" className="btn btn-success w-100">ログイン</button>
 
-                    <span>
-                        アカウントをお持ちでない方は、
-                        <a className="btn btn-link" onClick={() => setIsLoginPage(false)}>新規登録へ</a>
-
-                    </span>
+                    <button className="btn btn-outline-primary w-100 mt-3" onClick={handleGoogleLogin}>
+                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Googleロゴ" style={{ width: 20, marginRight: 8 }} />
+                        Googleでログイン
+                    </button>
                 </form>
             </div>
         </div>

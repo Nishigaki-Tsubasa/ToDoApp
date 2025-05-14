@@ -14,6 +14,7 @@ function App() {
     // ログイン状態を監視
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      console.log('ログイン状態:', currentUser);
     });
     return () => unsubscribe();
   }, []);
