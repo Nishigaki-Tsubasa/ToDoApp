@@ -35,11 +35,12 @@ function Todo({ user }) {
     const fetchUserName = async (uid) => {
         const userDocRef = doc(db, "users", uid);
         const userSnap = await getDoc(userDocRef);
+
+
         if (userSnap.exists()) {
             return userSnap.data().name;
         } else {
-            console.log("ユーザーデータが存在しません");
-            return null;
+            return user.displayName
         }
     };
 
