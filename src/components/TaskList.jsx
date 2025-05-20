@@ -1,4 +1,11 @@
 import { useState } from "react";
+import { Trash2 } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { Save } from 'lucide-react';// 保存アイコンをインポート
+
+
+
 
 function TaskList({ tasks, onDelete, onToggle, onEdit }) {
     const [editingId, setEditingId] = useState(null);
@@ -39,7 +46,7 @@ function TaskList({ tasks, onDelete, onToggle, onEdit }) {
                                 fontWeight: 'bold',
                             }}
                         >
-                            {task.completed && '✓'}
+                            {task.completed && <Check size={18} color="#fff" />}
                         </button>
                         <span className="fs-6 flex-grow-1 me-2" >
                             {editingId === task.id ? (
@@ -55,31 +62,36 @@ function TaskList({ tasks, onDelete, onToggle, onEdit }) {
                         </span>
                         <span className="fs-6 flex-grow-1 me-2">{/* タイトル or 編集欄 */}</span>
 
-                        <span className="d-flex align-items-center">
-
+                        <span className="d-flex align-items-center gap-1">
                             {editingId === task.id ? (
                                 <button
                                     onClick={() => handleSaveClick(task.id)}
-                                    className="btn btn-sm btn-success ms-2"
+                                    className="border-0 bg-transparent p-0 d-flex align-items-center justify-content-center"
+                                    style={{ width: '36px', height: '36px' }}
                                 >
-                                    保存
+                                    <Save size={18} color="#28a745" />
                                 </button>
                             ) : (
                                 <button
                                     onClick={() => handleEditClick(task)}
-                                    className="btn btn-sm btn-outline-secondary ms-2"
+                                    className="border-0 bg-transparent p-0 d-flex align-items-center justify-content-center"
+                                    style={{ width: '36px', height: '36px' }}
                                 >
-                                    編集
+                                    <SquarePen size={18} color="#6c757d" />
                                 </button>
                             )}
+
                             <button
                                 onClick={() => onDelete(task.id)}
-                                className="btn btn-sm btn-danger ms-2"
+                                className="border-0 bg-transparent p-0 d-flex align-items-center justify-content-center"
+                                style={{ width: '36px', height: '36px' }}
                             >
-                                削除
+                                <Trash2 size={18} color="#dc3545" />
                             </button>
-
                         </span>
+
+
+
                     </li>
                 ))}
             </ul>

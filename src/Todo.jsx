@@ -9,6 +9,10 @@ import { signOut } from 'firebase/auth'; // FirebaseのsignOutメソッドをイ
 import { auth } from './firebase'; // firebase.js から auth をインポート
 import './todo.css'; // CSSファイルをインポート
 
+import { User } from 'lucide-react';// ユーザーアイコンをインポート
+import { LogOut } from 'lucide-react';// ログアウトアイコンをインポート
+
+
 function Todo({ user }) {
     const handleLogout = async () => {
         try {
@@ -132,9 +136,12 @@ function Todo({ user }) {
                     </Navbar.Brand>
 
                     <div className="d-flex align-items-center gap-3">
-                        <p className="mb-0 fw-semibold text-secondary">ようこそ, {name} さん</p>
+                        <p className="mb-0 fw-semibold text-secondary">
+                            {/* <User /> */}
+                            ようこそ, {name} さん</p>
                         <button className="btn btn-outline-danger" onClick={handleLogout}>
                             ログアウト
+
                         </button>
                     </div>
                 </Container>
