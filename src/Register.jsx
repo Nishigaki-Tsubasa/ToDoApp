@@ -41,9 +41,9 @@ function Register() {
     };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-            <div className="card shadow p-4" style={{ width: '100%', maxWidth: '400px' }}>
-                <h2 className="text-center mb-4">新規登録</h2>
+        <div className="container d-flex justify-content-center align-items-center bg-light" style={{ minHeight: '100vh' }}>
+            <div className="card shadow-sm border-0 p-4 rounded-4" style={{ width: '100%', maxWidth: '400px' }}>
+                <h2 className="text-center mb-4 fw-bold text-primary">新規登録</h2>
 
                 {error && <div className="alert alert-danger">{error}</div>}
                 {success && <div className="alert alert-success">{success}</div>}
@@ -51,23 +51,44 @@ function Register() {
                 <form onSubmit={handleRegister}>
                     <div className="mb-3">
                         <label className="form-label">名前</label>
-                        <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
+                        <input
+                            type="text"
+                            className="form-control form-control-lg rounded-pill"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">メールアドレス</label>
-                        <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        <input
+                            type="email"
+                            className="form-control form-control-lg rounded-pill"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-4">
                         <label className="form-label">パスワード</label>
-                        <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <input
+                            type="password"
+                            className="form-control form-control-lg rounded-pill"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
                     </div>
 
-                    <button type="submit" className="btn btn-primary w-100">登録する</button>
+                    <button type="submit" className="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">
+                        登録する
+                    </button>
                 </form>
             </div>
         </div>
+
     );
 }
 
