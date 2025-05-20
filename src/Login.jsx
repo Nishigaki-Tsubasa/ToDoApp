@@ -39,9 +39,9 @@ function Login() {
 
 
     return (
-        <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-            <div className="card shadow p-4" style={{ width: '100%', maxWidth: '400px' }}>
-                <h2 className="text-center mb-4">ログイン</h2>
+        <div className="container d-flex justify-content-center align-items-center bg-light" style={{ minHeight: '100vh' }}>
+            <div className="card shadow-sm border-0 p-4 rounded-4" style={{ width: '100%', maxWidth: '400px' }}>
+                <h2 className="text-center mb-4 fw-bold text-success">ログイン</h2>
 
                 {error && <div className="alert alert-danger">{error}</div>}
                 {success && <div className="alert alert-success">{success}</div>}
@@ -49,23 +49,74 @@ function Login() {
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">
                         <label className="form-label">メールアドレス</label>
-                        <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        <input
+                            type="email"
+                            className="form-control form-control-lg rounded-pill"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">パスワード</label>
-                        <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <input
+                            type="password"
+                            className="form-control form-control-lg rounded-pill"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
                     </div>
 
-                    <button type="submit" className="btn btn-success w-100">ログイン</button>
+                    <button type="submit" className="btn btn-success btn-lg w-100 rounded-pill shadow-sm">
+                        ログイン
+                    </button>
 
-                    <button className="btn btn-outline-primary w-100 mt-3" onClick={handleGoogleLogin}>
-                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Googleロゴ" style={{ width: 20, marginRight: 8 }} />
+                    <button
+                        type="button"
+                        className="btn btn-outline-primary btn-lg w-100 mt-3 rounded-pill d-flex align-items-center justify-content-center shadow-sm"
+                        onClick={handleGoogleLogin}
+                    >
+                        <img
+                            src="https://developers.google.com/identity/images/g-logo.png"
+                            alt="Googleロゴ"
+                            style={{ width: 20, marginRight: 8 }}
+                        />
                         Googleでログイン
                     </button>
                 </form>
+
+                {/* <div className="text-center mt-4">
+                    <small>
+                        アカウントをお持ちでない方は{' '}
+                        <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => {
+                                <Rrgister />
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    // EnterかSpaceでクリックと同じ動作
+                                    e.preventDefault();
+                                    console.log('新規登録へ遷移');
+                                }
+                            }}
+                            style={{
+                                color: '#0d6efd', // ブートストラップのリンク色
+                                textDecoration: 'underline',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            新規登録
+                        </span>
+                    </small>
+                </div> */}
+
             </div>
         </div>
+
     );
 }
 
