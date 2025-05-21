@@ -37,7 +37,7 @@ function TaskForm({ onTaskAdded }) {
     };
 
     return (
-        <div className="container mt-5" style={{ fontSize: '0.9rem' }}>
+        <div className="container mt-4" style={{ fontSize: '0.9rem' }}>
             <div className="bg-white p-4 rounded shadow-sm border">
                 <h4 className="text-center mb-3">新しいタスクを追加</h4>
 

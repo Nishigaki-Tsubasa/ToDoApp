@@ -120,9 +120,9 @@ function Todo({ user }) {
     };
 
 
-    const handleEdit = async (id, newTitle) => {
+    const handleEdit = async (id, newTitle, deadline) => {
         const docRef = doc(db, "tasks", id);
-        await updateDoc(docRef, { title: newTitle });
+        await updateDoc(docRef, { title: newTitle, deadline: deadline });
         fetchTasks(); // 再取得 or 状態更新
     };
 

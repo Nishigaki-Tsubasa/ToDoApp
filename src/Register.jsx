@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
-function Register() {
+function Register({ setIsLoginPage }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -86,9 +86,32 @@ function Register() {
                         登録する
                     </button>
                 </form>
+
+                <div className="text-center mt-4">
+                    <small>
+                        すでにアカウントをお持ちの方は{' '}
+                        <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setIsLoginPage(true)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    setIsLoginPage(true);
+                                }
+                            }}
+                            style={{
+                                color: '#0d6efd',
+                                textDecoration: 'underline',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            ログイン
+                        </span>
+                    </small>
+                </div>
             </div>
         </div>
-
     );
 }
 
