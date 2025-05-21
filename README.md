@@ -1,12 +1,53 @@
-# React + Vite
+# ToDoアプリ
+## プロジェクト概要
+Task管理アプリを作成した。
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**主な機能**
+- タスクの追加
+- タスクの表示
+- タスクの削除
+- タスクの編集
+- ログイン/ログアウト・アカウント作成（Firebase認証）
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 使用技術
 
-## Expanding the ESLint configuration
+- フロントエンド: React (Vite)
+- バックエンド: Firebase（Firestore + Authentication）
+- フレームワーク: Bootstrap
+- ビルドツール: Vite
+- ホスティング: Firebase Hosting
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## セットアップ方法
+
+**デプロイ先のURL**
+https://todo-app-d42b6.web.app/ 
+
+**ローカル環境でのセットアップ**
+```
+git clone https://github.com/Nishigaki-Tsubasa/ToDoApp.git
+cd ToDoApp
+npm install
+```
+Firebaseのセットアップ
+
+Firebaseコンソールにアクセスし、プロジェクトを作成
+https://console.firebase.google.com/?hl=ja
+
+.env　ファイルを作成し、作成したプロジェクトを以下のように設定する
+```
+VITE_FIREBASE_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+VITE_FIREBASE_AUTH_DOMAIN=xxxxxxx.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=xxxxxxxxxxx
+VITE_FIREBASE_STORAGE_BUCKET=xxxxxxxxxxxx.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=1234567890
+VITE_FIREBASE_APP_ID=xxxxxxxxxxxxxxxxxxxxxxx
+```
+
+サーバーの起動
+
+` npm run dev `
+
+
+http://localhost:5173
+をブラウザで開く
