@@ -10,17 +10,34 @@ import { Save } from 'lucide-react';// 保存アイコンをインポート
 function TaskList({ tasks, onDelete, onToggle, onEdit }) {
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState("");
+    const [deadline, setDeadline] = useState('');
 
     const handleEditClick = (task) => {
         setEditingId(task.id);
         setEditTitle(task.title);
+        setDeadline(task.deadline); // 期限をセット
     };
 
     const handleSaveClick = (taskId) => {
-        onEdit(taskId, editTitle); // 親に更新依頼
+        onEdit(taskId, editTitle, deadline); // 親に更新依頼
         setEditingId(null); // 編集終了
         setEditTitle("");
     };
+
+    // 期限のクラスを決定する関数
+    const getDeadlineClass = (deadline) => {
+        const now = new Date();
+        const due = new Date(deadline);
+        const diffDays = (due - now) / (1000 * 60 * 60 * 24);
+
+        if (diffDays < 0) {
+            return 'text-danger';    // 期限切れ：赤
+        } else if (diffDays <= 2) {
+            return 'text-warning';   // 締切間近：オレンジ
+        } else {
+            return 'text-muted';     // 通常：薄いグレー
+        }
+    }
 
     return (
         <div className="mt-5">
@@ -48,20 +65,44 @@ function TaskList({ tasks, onDelete, onToggle, onEdit }) {
                         >
                             {task.completed && <Check size={18} color="#fff" />}
                         </button>
+
+                        {/* タスクタイトルの表示 */}
                         <span className="fs-6 flex-grow-1 me-2" >
                             {editingId === task.id ? (
-                                <input
-                                    type="text"
-                                    value={editTitle}
-                                    onChange={(e) => setEditTitle(e.target.value)}
-                                    className="form-control"
-                                />
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={editTitle}
+                                        onChange={(e) => setEditTitle(e.target.value)}
+                                        className="form-control"
+                                    />
+                                    <input type="date"
+                                        className="form-control"
+                                        value={deadline}
+                                        onChange={(e) => setDeadline(e.target.value)}
+                                    />
+                                </div>
+
                             ) : (
                                 task.title
                             )}
                         </span>
-                        <span className="fs-6 flex-grow-1 me-2">{/* タイトル or 編集欄 */}</span>
 
+                        {/* 期限の表示 */}
+                        <span
+                            className={`small d-flex me-2 ${task.deadline ? getDeadlineClass(task.deadline) : 'text-muted'
+                                }`}
+                        >
+                            {task.deadline
+                                ? new Date(task.deadline).toLocaleDateString('ja-JP', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                })
+                                : ''}
+                        </span>
+
+                        {/* 編集と削除ボタン */}
                         <span className="d-flex align-items-center gap-1">
                             {editingId === task.id ? (
                                 <button
