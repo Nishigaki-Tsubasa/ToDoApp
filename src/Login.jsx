@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from './firebase';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-
-function Login() {
+function Login({ setIsLoginPage }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -23,20 +21,16 @@ function Login() {
         }
     };
 
-
     const handleGoogleLogin = async () => {
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             console.log("ログイン成功:", user);
-            // 必要なら user 情報を保存したり、ページ遷移したり
         } catch (error) {
             console.error("Google ログイン失敗:", error);
         }
     };
-
-
 
     return (
         <div className="container d-flex justify-content-center align-items-center bg-light" style={{ minHeight: '100vh' }}>
@@ -69,13 +63,13 @@ function Login() {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-success btn-lg w-100 rounded-pill shadow-sm">
+                    <button type="submit" className="btn btn-success btn-lg mt-4 w-100 rounded-pill shadow-sm">
                         ログイン
                     </button>
 
                     <button
                         type="button"
-                        className="btn btn-outline-primary btn-lg w-100 mt-3 rounded-pill d-flex align-items-center justify-content-center shadow-sm"
+                        className="btn btn-outline-primary btn w-100 mt-3 rounded d-flex align-items-center justify-content-center shadow-sm"
                         onClick={handleGoogleLogin}
                     >
                         <img
@@ -87,24 +81,21 @@ function Login() {
                     </button>
                 </form>
 
-                {/* <div className="text-center mt-4">
+                <div className="text-center mt-4">
                     <small>
                         アカウントをお持ちでない方は{' '}
                         <span
                             role="button"
                             tabIndex={0}
-                            onClick={() => {
-                                <Rrgister />
-                            }}
+                            onClick={() => setIsLoginPage(false)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
-                                    // EnterかSpaceでクリックと同じ動作
                                     e.preventDefault();
-                                    console.log('新規登録へ遷移');
+                                    setIsLoginPage(false);
                                 }
                             }}
                             style={{
-                                color: '#0d6efd', // ブートストラップのリンク色
+                                color: '#0d6efd',
                                 textDecoration: 'underline',
                                 cursor: 'pointer',
                             }}
@@ -112,11 +103,9 @@ function Login() {
                             新規登録
                         </span>
                     </small>
-                </div> */}
-
+                </div>
             </div>
         </div>
-
     );
 }
 
