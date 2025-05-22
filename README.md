@@ -20,8 +20,6 @@ Task管理アプリを作成した。
 
 ## セットアップ方法
 
-**デプロイ先のURL**
-https://todo-app-d42b6.web.app/ 
 
 **ローカル環境でのセットアップ**
 ```
@@ -51,3 +49,8 @@ VITE_FIREBASE_APP_ID=xxxxxxxxxxxxxxxxxxxxxxx
 
 http://localhost:5173
 をブラウザで開く
+
+
+
+**デプロイ先のURL**
+https://todo-app-d42b6.web.app/ 
