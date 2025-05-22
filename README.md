@@ -19,9 +19,9 @@ ToDoリストを作成
 
 
 ## 実行環境
-開発エディター : Visual Studio Code
-OS : Windows 11 Pro <br>
-検索エンジン : Google Chrome 
+- 開発エディター : Visual Studio Code
+- OS : Windows 11 Pro 
+- 検索エンジン : Google Chrome 
 
 ## セットアップ方法
 
