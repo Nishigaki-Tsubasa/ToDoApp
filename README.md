@@ -9,7 +9,6 @@ ToDoリストを作成
 - タスクの編集
 - ログイン/ログアウト・アカウント作成（Firebase認証）
 
-
 ## 使用技術
 
 - フロントエンド: React (Vite)
@@ -17,6 +16,12 @@ ToDoリストを作成
 - フレームワーク: Bootstrap
 - ビルドツール: Vite
 - ホスティング: Firebase Hosting
+
+
+## 実行環境
+開発エディター : Visual Studio Code
+OS : Windows 11 Pro <br>
+検索エンジン : Google Chrome 
 
 ## セットアップ方法
 
