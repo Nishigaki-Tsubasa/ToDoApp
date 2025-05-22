@@ -53,4 +53,4 @@ http://localhost:5173
 
 
 ## **デプロイ先のURL**
-https://todo-app-d42b6.web.app/ 
+https://todo-app-d42b6.web.app/
