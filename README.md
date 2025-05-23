@@ -11,7 +11,7 @@ ToDoリストを作成
 
 ## 使用技術
 
-- フロントエンド: React (Vite)
+- フロントエンド: React (JavaScript)
 - バックエンド: Firebase（Firestore + Authentication）
 - フレームワーク: Bootstrap
 - ビルドツール: Vite
