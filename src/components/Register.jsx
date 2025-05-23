@@ -1,46 +1,65 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from './firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../firebase';
 
-function Login({ setIsLoginPage }) {
+function Register({ setIsLoginPage }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    const handleLogin = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
         setSuccess('');
 
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            setSuccess('ログイン成功しました！');
-        } catch (err) {
-            setError("ログインに失敗しました。メールアドレスまたはパスワードを確認してください。");
+        if (password.length < 6) {
+            setError('パスワードは6文字以上で入力してください');
+            return;
         }
-    };
 
-    const handleGoogleLogin = async () => {
-        const provider = new GoogleAuthProvider();
         try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            console.log("ログイン成功:", user);
-        } catch (error) {
-            console.error("Google ログイン失敗:", error);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const uid = userCredential.user.uid;
+
+            await setDoc(doc(db, 'users', uid), {
+                name,
+                email,
+                createdAt: serverTimestamp(),
+                role: 'user',
+            });
+
+            setSuccess('登録に成功しました！');
+            setEmail('');
+            setPassword('');
+            setName('');
+        } catch (err) {
+            setError(err.message);
         }
     };
 
     return (
         <div className="container d-flex justify-content-center align-items-center bg-light" style={{ minHeight: '100vh' }}>
             <div className="card shadow-sm border-0 p-4 rounded-4" style={{ width: '100%', maxWidth: '400px' }}>
-                <h2 className="text-center mb-4 fw-bold text-success">ログイン</h2>
+                <h2 className="text-center mb-4 fw-bold text-primary">新規登録</h2>
 
                 {error && <div className="alert alert-danger">{error}</div>}
                 {success && <div className="alert alert-success">{success}</div>}
 
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleRegister}>
+                    <div className="mb-3">
+                        <label className="form-label">名前</label>
+                        <input
+                            type="text"
+                            className="form-control form-control-lg rounded-pill"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+
                     <div className="mb-3">
                         <label className="form-label">メールアドレス</label>
                         <input
@@ -52,7 +71,7 @@ function Login({ setIsLoginPage }) {
                         />
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-4">
                         <label className="form-label">パスワード</label>
                         <input
                             type="password"
@@ -63,35 +82,22 @@ function Login({ setIsLoginPage }) {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-success btn-lg mt-4 w-100 rounded-pill shadow-sm">
-                        ログイン
-                    </button>
-
-                    <button
-                        type="button"
-                        className="btn btn-outline-primary btn w-100 mt-3 rounded d-flex align-items-center justify-content-center shadow-sm"
-                        onClick={handleGoogleLogin}
-                    >
-                        <img
-                            src="https://developers.google.com/identity/images/g-logo.png"
-                            alt="Googleロゴ"
-                            style={{ width: 20, marginRight: 8 }}
-                        />
-                        Googleでログイン
+                    <button type="submit" className="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">
+                        登録する
                     </button>
                 </form>
 
                 <div className="text-center mt-4">
                     <small>
-                        アカウントをお持ちでない方は{' '}
+                        すでにアカウントをお持ちの方は{' '}
                         <span
                             role="button"
                             tabIndex={0}
-                            onClick={() => setIsLoginPage(false)}
+                            onClick={() => setIsLoginPage(true)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
                                     e.preventDefault();
-                                    setIsLoginPage(false);
+                                    setIsLoginPage(true);
                                 }
                             }}
                             style={{
@@ -100,7 +106,7 @@ function Login({ setIsLoginPage }) {
                                 cursor: 'pointer',
                             }}
                         >
-                            新規登録
+                            ログイン
                         </span>
                     </small>
                 </div>
@@ -109,4 +115,4 @@ function Login({ setIsLoginPage }) {
     );
 }
 
-export default Login;
+export default Register;

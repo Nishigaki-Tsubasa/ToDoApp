@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
-import Login from './Login';
-import Register from './Register';
+import Login from './components/Login';
+import Register from './components/Register';
 import Todo from './ToDo';
 
 function App() {

@@ -1,16 +1,13 @@
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy, getDoc, where, onSnapshot } from 'firebase/firestore';
+import { collection, deleteDoc, doc, updateDoc, query, orderBy, getDoc, where, onSnapshot } from 'firebase/firestore';
 import { db } from './firebase';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { signOut } from 'firebase/auth'; // FirebaseのsignOutメソッドをインポート
 import { auth } from './firebase'; // firebase.js から auth をインポート
-import './todo.css'; // CSSファイルをインポート
 
-import { User } from 'lucide-react';// ユーザーアイコンをインポート
-import { LogOut } from 'lucide-react';// ログアウトアイコンをインポート
 
 
 function Todo({ user }) {
